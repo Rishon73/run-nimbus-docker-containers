@@ -1,4 +1,4 @@
-# How to change origin to work with a new branch repository 
+# How to change origin to work with a new branch repository
 #############################################################
 # show the currently being used origin
 git remote -v
@@ -15,7 +15,7 @@ origin  https://github.com/admpresales/AOS_TruClient_buy_headphones_with_transac
 origin  https://github.com/admpresales/AOS_TruClient_buy_headphones_with_transactions.git (push)
 
 # made some changes to the code and now it's time to commit and push
-PS C:\Users\demo\Documents\github\AOS_TruClient_buy_headphones_with_transactions> git diff --name-only
+git diff --name-only
 ScriptUploadMetadata.xml
 default.xml
 mdrv_cmd.txt
