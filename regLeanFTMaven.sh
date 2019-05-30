@@ -7,6 +7,7 @@ echo "It uses Maven pom files to install the jar files and long install for Sele
 echo "It assumes the LeanFT jar files are located:"
 echo "    Linux: /opt/leanft/sdk/Maven and /opt/leanft/selenium-sdk/Java"
 echo "    Mac: /Applications/LeanFT/sdk/Maven and /Applications/LeanFT/Selenium SDK/Java"
+echo "It genarates a file called regLeanFT.sh at the same directory"
 echo "------------------------------------------------------------------------------------"
 
 
@@ -22,6 +23,7 @@ fi
 LFT_VERSION=$1
 MVN_PATH=$(which mvn)
 OS_TYPE=$(uname -a | awk '{print $1}')
+OUTPUT_FILE="./regLeanFT.sh"
 
 # Check OS - Mac or Linux
 if [ $OS_TYPE == "Darwin" ]; then
@@ -35,9 +37,9 @@ if [ $OS_TYPE == "Darwin" ]; then
 elif [ $OS_TYPE == "Linux" ]; then
   echo "in Linux zone"
   SDK_MAVEN_PATH="/opt/leanft/sdk/Maven"
-  SDK_PATH=""
+  SDK_PATH="/opt/leanft/sdk/Java"
   SELENIUM_SDK_PATH="/opt/leanft/selenium-sdk/Java"
-  APP_MODEL_CODE_GEN_PATH=""
+  APP_MODEL_CODE_GEN_PATH="/opt/leanft/Tools/appmodel-code-generator/Java"
 else
   echo "This script can run on Mac or Linux. Exiting..."
   exit
@@ -56,25 +58,27 @@ APP_MODEL_HELPER="appmodel-code-generator-helper"
 
 ########################################
 # 6 SDK jar files
-$MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$COMMON-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$COMMON-$LFT_VERSION-pom.xml
-$MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$REPORT-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$REPORT-$LFT_VERSION-pom.xml
-$MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$REPORT_BUILDER-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$REPORT_BUILDER-$LFT_VERSION-pom.xml
-$MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$SDK-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$SDK-$LFT_VERSION-pom.xml
-$MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$UNIT_TESTING-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$UNIT_TESTING-$LFT_VERSION-pom.xml
-$MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$VERIFICATIONS-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$VERIFICATIONS-$LFT_VERSION-pom.xml
+echo $MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$COMMON-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$COMMON-$LFT_VERSION-pom.xml > $OUTPUT_FILE
+echo $MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$REPORT-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$REPORT-$LFT_VERSION-pom.xml >> $OUTPUT_FILE
+echo $MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$REPORT_BUILDER-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$REPORT_BUILDER-$LFT_VERSION-pom.xml >> $OUTPUT_FILE
+echo $MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$SDK-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$SDK-$LFT_VERSION-pom.xml >> $OUTPUT_FILE
+echo $MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$UNIT_TESTING-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$UNIT_TESTING-$LFT_VERSION-pom.xml >> $OUTPUT_FILE
+echo $MVN_PATH install:install-file -Dfile=$SDK_MAVEN_PATH/$VERIFICATIONS-$LFT_VERSION.jar -DpomFile=$SDK_MAVEN_PATH/$VERIFICATIONS-$LFT_VERSION-pom.xml >> $OUTPUT_FILE
 
 # JavaDoc
-$MVN_PATH install:install-file -Dfile=$SDK_PATH/$JAVA_DOC -DgroupId=com.hp.lft -DartifactId=sdk -Dclassifier=javadoc -Dversion=$LFT_VERSION -Dpackaging=jar
+echo $MVN_PATH install:install-file -Dfile=$SDK_PATH/$JAVA_DOC -DgroupId=com.hp.lft -DartifactId=sdk -Dclassifier=javadoc -Dversion=$LFT_VERSION -Dpackaging=jar >> $OUTPUT_FILE
 
 # Selenium SDK
-$MVN_PATH install:install-file -Dfile=$SELENIUM_SDK_PATH/$SELENIUM -DgroupId=com.hpe.lft -DartifactId=selenium-sdk -Dversion=$LFT_VERSION -Dpackaging=jar
+echo $MVN_PATH install:install-file -Dfile=$SELENIUM_SDK_PATH/$SELENIUM -DgroupId=com.hpe.lft -DartifactId=selenium-sdk -Dversion=$LFT_VERSION -Dpackaging=jar >> $OUTPUT_FILE
 
 # Application Model Code Generator
-$MVN_PATH install:install-file -Dfile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_MOJO-$LFT_VERSION.jar -DpomFile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_MOJO-$LFT_VERSION-pom.xml
-$MVN_PATH install:install-file -Dfile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_HELPER.jar -DpomFile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_HELPER-pom.xml
+echo $MVN_PATH install:install-file -Dfile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_MOJO-$LFT_VERSION.jar -DpomFile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_MOJO-$LFT_VERSION-pom.xml >> $OUTPUT_FILE
+echo $MVN_PATH install:install-file -Dfile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_HELPER.jar -DpomFile=$APP_MODEL_CODE_GEN_PATH/$APP_MODEL_HELPER-pom.xml >> $OUTPUT_FILE
 
 ########################################
 
+echo "The file $OUTPUT_FILE was created in this folder."
+echo "To run it, us 'bash $OUTPUT_FILE' command"
 
 #### MCUtilities #####
 # $MVN_PATH install:install-file -Dfile=/home/demo/IdeaProjects/AOS_Web_LeanFT_Parellel/MCUtils/MCUtils.jar -DgroupId=com.mf -DartifactId=MCUtilities -Dversion=4.0.0 -Dpackaging=jar
